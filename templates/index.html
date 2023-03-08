@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Bootstrap CSS -->
+    {{ bootstrap.load_css() }}
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+    <title>Colour Palette Generator</title>
+</head>
+<body>
+<div class="container text-center">
+    <h1 class="mt-4">Colour Palette Generator</h1>
+    <div class="card text-center m-3">
+        <div class="card-header bg-white">
+            <img src="{{ img_path }}" alt="image" style="max-height: 400px; width: auto; height: auto; max-width: 100%;">
+        </div>
+        <div class="card-body bg-white">
+            {% for color, hex_c, cnt in highest_colour_counts %}
+            <div class="card-list-item d-flex justify-content-center m-2">
+                <div class="text-center" style="width: 250px">
+                    <div style="background-color: rgb{{color}}; width: 100px; height: 50px; border: black 1px solid; margin: auto;">
+                    </div>
+                </div>
+                <div class="text-left" style="width: 200px; padding: 0;">
+                    <p style="margin: 0;">RGB: {{ color }}</p>
+                    <p style="margin: 0;">HEX: {{hex_c}}</p>
+                </div>
+                <div class="text-left" style="width: 200px; padding: 10px 0;">
+                    Percentage: <b>{{ "%.2f"| format(100*cnt/total_bins) }}%</b>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="card-footer d-flex justify-content-center">
+            <form method="post" action="{{ url_for('home') }}" enctype="multipart/form-data">
+                <table class="text-left">
+                    <tr>
+                        <td>
+                            <label>Picture</label>
+                        </td>
+                        <td>
+                            <input type="file" id="imageInput" name="image" accept="image/*">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Number of colours</label>
+                        </td>
+                        <td>
+                            <input type="number" name="num_colours" min="1" max="100" step="1" value="{{ num_colours }}" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Delta (1-255)</label>
+                        </td>
+                        <td>
+                            <input type="number" name="delta" min="1" max="255" step="1"  value="{{ delta }}" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        <input type="submit"></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Custom JS -->
+<script language="JavaScript" type="text/javascript"
+        src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+</html>
